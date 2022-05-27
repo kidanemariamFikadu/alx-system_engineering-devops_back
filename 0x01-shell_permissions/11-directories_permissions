@@ -1,0 +1,2 @@
+#!/bash/bin
+chmod ugo+x $(find./* -type d)

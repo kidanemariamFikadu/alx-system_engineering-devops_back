@@ -1,21 +1,16 @@
 #!/usr/bin/env bash
-# Extracts information from dig of website and prints out result
-
-func1 () {
-    if [ $# -eq 1 ]; then
-	subs="www lb-01 web-01 web-02"
-    else
-	subs="$2"
-    fi
-    for bus in $subs
-    do
-	dig "$bus"."$1" | awk '!/;/' | grep '[[:blank:]]' |\
-awk -v bus="$bus" '{ print "The subdomain " bus " is a " $4 " record and points to " $5 }' ; echo | grep '[[:blank:]]'
-    done
-}
-
-if [ "$#" -eq 1 ]; then
-    func1 "$1"
+# Bash script that will display information about subdomains
+domain () {
+if [ "$2" ];
+then
+    echo -n "The subdomain $2 is a"
+    dig "$2.$1" | grep -A1 'ANSWER SECTION:' | awk '{print " " $4 " record and points to " $5}' | tail -n 1
 else
-    func1 "$1" "$2"
+    for i in www lb-01 web-01 web-02
+    do
+        echo -n "The subdomain $i is a"
+        dig "$i.$1" | grep -A1 'ANSWER SECTION:' | awk '{print " " $4 " record and points to " $5}' | tail -n 1
+    done
 fi
+}
+domain "$1" "$2"

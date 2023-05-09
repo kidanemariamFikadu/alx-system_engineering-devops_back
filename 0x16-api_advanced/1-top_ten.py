@@ -22,6 +22,6 @@ def top_ten(subreddit):
         for get_data in req.json().get("data").get("children"):
             dat = get_data.get("data")
             title = dat.get("title")
-            print(title)
+            return(title)
     else:
-        print(None)
+        return(None)
